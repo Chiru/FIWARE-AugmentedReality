@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" >
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <!-- Style -->
+    <link rel="stylesheet" type="text/css" media="all" href="../layout.css"/>
+    <title>WeX AR Application</title>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+    <div id="content">
+        <div id="renderArea">
+
+            <canvas id="background" ></canvas>
+            <video autoplay="false" style="position: absolute; height: 480px; width: 480px;"></video>
+            <xml3d id="xml3dContent" xmlns="http://www.xml3d.org/2009/xml3d" activeView="#View" style="background: rgba(0,0,0,0);">
+
+
+                     <view id = "View" position="0 2.5 0" />
+
+                    <lightshader id="light1" script="urn:xml3d:lightshader:directional">
+                        <float3 name="intensity">1.0 1.0 1.0</float3>
+                    </lightshader>
+
+                    <transform id="t_light" translation="0.000000 20.000000 0.000000"/>
+                    <group transform="#t_light">
+                        <light id="light_1" shader="#light1" />
+                    </group>
+
+                    <transform id="t_house" rotation="1.000000 0.000000 0.000000 0.000000" scale="1.500000 1.500000 1.500000" translation="0.000000 0.000000 0.000000"/>
+                   	
+                   	<group id="house" transform="#t_house">
+		                <group shader="../../assets/house/house_joined_turned.xml#floor">
+			                <mesh src="../../assets/house/house_joined_turned.xml#mesh_house_floor" type="triangles"/>
+		                </group>
+		                <group shader="../../assets/house/house_joined_turned.xml#roof_inner">
+			                <mesh src="../../assets/house/house_joined_turned.xml#mesh_house_roof_inner" type="triangles"/>
+		                </group>
+		                <group shader="../../assets/house/house_joined_turned.xml#roof_out">
+			                <mesh src="../../assets/house/house_joined_turned.xml#mesh_house_roof_out" type="triangles"/>
+		                </group>
+		                <group shader="../../assets/house/house_joined_turned.xml#windowframe">
+			                <mesh src="../../assets/house/house_joined_turned.xml#mesh_house_windowframe" type="triangles"/>
+		                </group>
+		                <group shader="../../assets/house/house_joined_turned.xml#outerwall">
+			                <mesh src="../../assets/house/house_joined_turned.xml#mesh_house_outerwall" type="triangles"/>
+		                </group>
+		                <group shader="../../assets/house/house_joined_turned.xml#chairmetal">
+			                <mesh src="../../assets/house/house_joined_turned.xml#mesh_house_chairmetal" type="triangles"/>
+		                </group>
+		                <group shader="../../assets/house/house_joined_turned.xml#leather">
+			                <mesh src="../../assets/house/house_joined_turned.xml#mesh_house_leather" type="triangles"/>
+		                </group>
+		                <group shader="../../assets/house/house_joined_turned.xml#wood">
+			                <mesh src="../../assets/house/house_joined_turned.xml#mesh_house_wood" type="triangles"/>
+		                </group>
+		                <group shader="../../assets/house/house_joined_turned.xml#table">
+			                <mesh src="../../assets/house/house_joined_turned.xml#mesh_house_table" type="triangles"/>
+		                </group>
+		                <group shader="../../assets/house/house_joined_turned.xml#terrace">
+			                <mesh src="../../assets/house/house_joined_turned.xml#mesh_house_terrace" type="triangles"/>
+		                </group>
+		                <group shader="../../assets/house/house_joined_turned.xml#innerwall">
+			                <mesh src="../../assets/house/house_joined_turned.xml#mesh_house_innerwall" type="triangles"/>
+		                </group>
+		                <group shader="../../assets/house/house_joined_turned.xml#insidebrick">
+			                <mesh src="../../assets/house/house_joined_turned.xml#mesh_house_insidebrick" type="triangles"/>
+		                </group>
+	                </group>
+                    
+            </xml3d>
+        </div>
+        
+            <div id="controlContainer">
+                <div id="controlArea">
+                    <h4>fov slider</h4>
+                    <input type="range" min="0" max="90" value="45" step="1" onchange="showValue(this.value)" />
+                    <span id="range">45</span>
+                    <script type="text/javascript">
+                    function showValue(newValue)
+                    {
+	                    document.getElementById("range").innerHTML=newValue;
+	                    xml3d = document.querySelector("xml3d");
+	                    camera = XML3D.URIResolver.resolveLocal(xml3d.getAttribute("activeView"), xml3d.ownerDocument);
+	                    camera.fieldOfView = newValue * Math.PI/180;
+	                    
+                    }
+                    </script>
+                </div>
+            </div>
+        
+    </div>
+
+    <div id="footer">
+        <div id="infoPanel">
+        </div>
+        <div id="log"></div>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="../../deps/xml3d.js"></script>
+<script type="text/javascript" src="../../deps/Util.js"></script>
+<script type="text/javascript" src="../../deps/alvar.js"></script>
+
+<script type="text/javascript" src="../../src/Namespace.js"></script>
+<script type="text/javascript" src="../../src/Framework.js"></script>
+<script type="text/javascript" src="../../src/Communication.js"></script>
+<script type="text/javascript" src="../../src/SensorManager.js"></script>
+<script type="text/javascript" src="../../src/SceneManager.js"></script>
+<script type="text/javascript" src="../../src/xAlvarImage.js"></script>
+<script type="text/javascript" src="../../src/ARManager.js"></script>
+
+<script type="text/javascript" src="../scripts/house.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" >
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- Style -->
+    <link rel="stylesheet" type="text/css" media="all" href="../layout.css"/>
+
+    <title>WeX AR Application</title>
+
+</head>
+<body>
+    <div id="wrapper">
+      <div id="content">
+          <div id="renderArea">
+          
+                <div id="imageContainer" style="display: none;">
+                    <div>../../markers/imageMarker/CIE_Logo.png</div>
+                    <div>../../markers/imageMarker/bottle.bmp</div>
+                </div>
+                
+          <canvas id="background" ></canvas>
+            <xml3d id="xml3dContent" xmlns="http://www.xml3d.org/2009/xml3d" activeView="#View" style="background: rgba(0,0,0,0);">
+                    
+            <data id="MarkerDetector" 
+	            compute="Marker5x5Transforms, Marker3x3Transforms, imageMarkerTransforms, 
+	            Marker5x5Visibilities, Marker3x3Visibilities, imageMarkerVisibilities, perspective 
+	            = alvar.detect(arvideo, Marker5x5, Marker3x3, imageMarkers, allowedImageMarkerErrors, flip)">
+				    <bool name = "flip">false</bool>
+				    <int name = "allowedImageMarkerErrors">250</int>
+				    <int id = "imageMarkers" name = "imageMarkers">0</int>
+				    <int id = "Marker3x3" name = "Marker3x3">32</int>
+				    <int id = "Marker5x5" name = "Marker5x5">1</int>
+                    <texture name="arvideo">
+                        <video autoplay="false"></video>
+                    </texture>
+			</data>
+                
+                <view id="View" perspective="#MarkerDetector" /> 
+                <!--
+                <transform id="t_testObject" scale="0.4000000 0.4000000 0.4000000" />
+                <group id = "testObject" transform="#t_testObject" shader="../../assets/markerDetection/cube.xml#material" visible="false">
+                    <mesh type="triangles" src="../../assets/markerDetection/cube.xml#mesh" />
+                </group>
+                
+                <transform id="t_testObject2" scale="0.4000000 0.4000000 0.4000000" />
+                <group id = "testObject2" transform="#t_testObject2" shader="../../assets/markerDetection/cube.xml#material2" visible="false">
+                    <mesh type="triangles" src="../../assets/markerDetection/cube.xml#mesh" />
+                </group>
+                
+                <transform id="t_testObject3" scale="0.4000000 0.4000000 0.4000000" />
+                <group id = "testObject3" transform="#t_testObject3" shader="../../assets/markerDetection/cube.xml#material3" visible="false">
+                    <mesh type="triangles" src="../../assets/markerDetection/cube.xml#mesh" />
+                </group>      
+                -->  
+                
+                <transform id="t_teapot_ar" scale="0.02000000 0.02000000 0.02000000" />
+                <group id = "testObject" transform="#t_teapot_ar" shader="../../assets/markerDetection/teapot.xml#material" visible="false">
+                    <mesh type="triangles" src="../../assets/markerDetection/teapot.xml#mesh" />
+                </group>
+                
+                <transform id="t_teapot_ar2" scale="0.02000000 0.02000000 0.02000000" />
+                <group id = "testObject2" transform="#t_teapot_ar2" shader="../../assets/markerDetection/teapot.xml#material2" visible="false">
+                    <mesh type="triangles" src="../../assets/markerDetection/teapot.xml#mesh" />
+                </group>
+                
+                <transform id="t_teapot_ar3" scale="0.02000000 0.02000000 0.02000000" />
+                <group id = "testObject3" transform="#t_teapot_ar3" shader="../../assets/markerDetection/teapot.xml#material3" visible="false">
+                    <mesh type="triangles" src="../../assets/markerDetection/teapot.xml#mesh" />
+                </group>
+                  
+                <lightshader id="light1" script="urn:xml3d:lightshader:directional">
+                    <float3 name="intensity">0.8 0.8 0.8</float3>
+                </lightshader>
+                
+                <transform id="t_light" translation="0.000000 50.000000 0.000000"/>
+                <group transform="#t_light">
+                   <light shader="#light1" />
+               </group>
+               
+            </xml3d>
+        
+            </div>
+        </div>
+    </div>
+    
+<script type="text/javascript" src="../../deps/xml3d.js"></script>
+<script type="text/javascript" src="../../deps/Util.js"></script>
+<script type="text/javascript" src="../../deps/alvar.js"></script>
+
+<script type="text/javascript" src="../../src/Namespace.js"></script>
+<script type="text/javascript" src="../../src/Framework.js"></script>
+<script type="text/javascript" src="../../src/Communication.js"></script>
+<script type="text/javascript" src="../../src/SensorManager.js"></script>
+<script type="text/javascript" src="../../src/SceneManager.js"></script>
+<script type="text/javascript" src="../../src/xAlvarImage.js"></script>
+<script type="text/javascript" src="../../src/ARManager.js"></script>
+
+<script type="text/javascript" src="../scripts/markerDetection.js"></script>
+</body>
+</html>

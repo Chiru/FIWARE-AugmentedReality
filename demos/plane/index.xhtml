@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" >
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <!-- Style -->
+    <link rel="stylesheet" type="text/css" media="all" href="../layout.css"/>
+
+    <title>WeX AR Application</title>
+
+</head>
+
+<body>
+    
+<div id="wrapper">
+    <div id="content">
+
+        <div id="renderArea">
+
+            <canvas id="background" ></canvas>
+
+            <xml3d id="xml3dContent" xmlns="http://www.xml3d.org/2009/xml3d" activeView="#View" style="background: rgba(0,0,0,0);">
+
+                <data id="MarkerDetector" 
+	                compute="Marker5x5Transforms, Marker3x3Transforms, imageMarkerTransforms, 
+	                Marker5x5Visibilities, Marker3x3Visibilities, imageMarkerVisibilities, perspective 
+	                = alvar.detect(arvideo, Marker5x5, Marker3x3, imageMarkers, allowedImageMarkerErrors, flip)">
+				        <bool name = "flip">false</bool>
+				        <int name = "allowedImageMarkerErrors"></int>
+				        <int id = "imageMarkers" name = "imageMarkers"></int>
+				        <int id = "Marker3x3" name = "Marker3x3">32</int>
+				        <int id = "Marker5x5" name = "Marker5x5"></int>
+                        <texture name="arvideo">
+                            <video autoplay="false"></video>
+                        </texture>
+			    </data>  
+                 
+                <!-- Viewpoint with connection to AR data -->
+                <view id="View" perspective="#MarkerDetector" />
+               
+               <lightshader id="light1" script="urn:xml3d:lightshader:directional">
+                    <float3 name="intensity">0.8 0.8 0.8</float3>
+                </lightshader>
+
+               <transform id="t_light" translation="0.000000 50.000000 0.000000"/>
+               <group transform="#t_light">
+                   <light shader="#light1" />
+               </group>
+               
+               
+               <transform id="t_prop" rotation="0.0 0.0 1.0 0.2617994" scale="1.0 1.0 1.0" translation="0.0 0.0 5.40413"/>
+               
+               <transform id="t_plane" scale="0.15000 0.150000 0.150000" style="translate3d(0, 15.0, 0)"/>
+               <group id="plane" transform = "#t_plane" visible="false">
+                    <group shader="../../assets/plane/plane.xml#shader_matte" >
+                        <mesh src="../../assets/plane/plane.xml#mesh1" type="triangles"/>
+                    </group>
+                    <group shader="../../assets/plane/plane.xml#shader_shine" >
+                        <mesh src="../../assets/plane/plane.xml#mesh2" type="triangles"/>
+                    </group>
+                    <group id="prop" transform="#t_prop">
+                        <group shader="../../assets/plane/plane.xml#shader_shine" >
+                            <mesh src="../../assets/plane/plane.xml#mesh_prop" type="triangles"/>
+                        </group>
+                    </group>
+               </group>
+               
+            </xml3d>
+        </div>
+    </div>
+
+    <div id="footer">
+        <div id="infoPanel">
+        </div>
+        <div id="log"></div>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="../../deps/xml3d.js"></script>
+<script type="text/javascript" src="../../deps/Util.js"></script>
+<script type="text/javascript" src="../../deps/alvar.js"></script>
+
+<script type="text/javascript" src="../../src/Namespace.js"></script>
+<script type="text/javascript" src="../../src/Framework.js"></script>
+<script type="text/javascript" src="../../src/Communication.js"></script>
+<script type="text/javascript" src="../../src/SensorManager.js"></script>
+<script type="text/javascript" src="../../src/SceneManager.js"></script>
+<script type="text/javascript" src="../../src/xAlvarImage.js"></script>
+<script type="text/javascript" src="../../src/ARManager.js"></script>
+
+<script type="text/javascript" src="../scripts/plane.js"></script>
+
+
+</body>
+
+</html>
