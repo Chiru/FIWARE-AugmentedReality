@@ -123,18 +123,18 @@
             if(!activeCamera)
                 return;
 
-            var x = degreesOfFreedom.pitch ? cameraVerticalPlane + deviceOrientationEvent.beta : 0;
+            var x = degreesOfFreedom.pitch ? (deviceOrientationEvent.beta - cameraVerticalPlane) : 0;
             var z = degreesOfFreedom.roll ? deviceOrientationEvent.gamma : 0;
             var y = degreesOfFreedom.yaw ? deviceOrientationEvent.alpha : 0;
             
             var degToRad2 = Math.PI/360;
                
             //convert to quaternion, order z y x
-            var cosX = Math.cos( -x * degToRad2 ),
-		    cosY = Math.cos( -y * degToRad2 ),
+            var cosX = Math.cos( x * degToRad2 ),
+		    cosY = Math.cos( y * degToRad2 ),
 		    cosZ = Math.cos( -z * degToRad2 ),
-		    sinX = Math.sin( -x * degToRad2 ),
-		    sinY = Math.sin( -y * degToRad2 ),
+		    sinX = Math.sin( x * degToRad2 ),
+		    sinY = Math.sin( y * degToRad2 ),
 		    sinZ = Math.sin( -z * degToRad2 );
 
 	        var rotX = sinX * cosY * cosZ - cosX * sinY * sinZ,
