@@ -22,19 +22,18 @@
 
             <xml3d id="xml3dContent" xmlns="http://www.xml3d.org/2009/xml3d" activeView="#View" style="background: rgba(0,0,0,0);">
 
-                <data id="MarkerDetector" 
-	                compute="Marker5x5Transforms, Marker3x3Transforms, imageMarkerTransforms, 
-	                Marker5x5Visibilities, Marker3x3Visibilities, imageMarkerVisibilities, perspective 
-	                = alvar.detect(arvideo, Marker5x5, Marker3x3, imageMarkers, allowedImageMarkerErrors, flip)">
-				        <bool name = "flip">false</bool>
-				        <int name = "allowedImageMarkerErrors"></int>
-				        <int id = "imageMarkers" name = "imageMarkers"></int>
-				        <int id = "Marker3x3" name = "Marker3x3">32</int>
-				        <int id = "Marker5x5" name = "Marker5x5"></int>
-                        <texture name="arvideo">
-                            <video autoplay="false"></video>
-                        </texture>
-			    </data>  
+            <data id="MarkerDetector" 
+	            compute="marker5x5Transforms, customMarkerTransforms, 
+	            marker5x5Visibilities, customMarkerVisibilities, perspective 
+	            = detect(arvideo, marker5x5, customMarkers, customMarkerConfidence, flip)">
+				    <bool name = "flip">false</bool>
+				    <float name = "customMarkerConfidence">0.5</float>
+				    <int id = "customMarkers" name = "customMarkers"></int>
+				    <int id = "marker5x5" name = "marker5x5">1</int>
+                    <texture name="arvideo">
+                        <video autoplay="false"></video>
+                    </texture>
+			</data>
                  
                 <!-- Viewpoint with connection to AR data -->
                 <view id="View" perspective="#MarkerDetector" />
@@ -80,14 +79,13 @@
 
 <script type="text/javascript" src="../../deps/xml3d.js"></script>
 <script type="text/javascript" src="../../deps/Util.js"></script>
-<script type="text/javascript" src="../../deps/alvar.js"></script>
-
+<script type="text/javascript" src="../../deps/JSARToolKit.js"></script>
 <script type="text/javascript" src="../../src/Namespace.js"></script>
 <script type="text/javascript" src="../../src/Framework.js"></script>
 <script type="text/javascript" src="../../src/Communication.js"></script>
 <script type="text/javascript" src="../../src/SensorManager.js"></script>
 <script type="text/javascript" src="../../src/SceneManager.js"></script>
-<script type="text/javascript" src="../../src/xAlvarImage.js"></script>
+<script type="text/javascript" src="../../src/xJSARToolKit.js"></script>
 <script type="text/javascript" src="../../src/ARManager.js"></script>
 
 <script type="text/javascript" src="../scripts/plane.js"></script>

@@ -33,13 +33,13 @@
         camera.fieldOfView = 40 * Math.PI/180;    
     };
     
-    function drawMesh(Marker3x3Transforms, Marker5x5Transforms, imageMarkerTransforms, Marker3x3Visibilities, Marker5x5Visibilities, imageMarkerVisibilities) {
+    function drawMesh(Marker5x5Transforms, imageMarkerTransforms, Marker5x5Visibilities, imageMarkerVisibilities) {
     
-        if(!Marker3x3Transforms || !Marker3x3Visibilities || flying)
+        if(!Marker5x5Transforms || !Marker5x5Visibilities || flying)
             return;
             
-        plane.visible = Marker3x3Visibilities[0];
-        sceneManager.setTransformFromMarker(Marker3x3Transforms[0], plane);    
+        plane.visible = Marker5x5Visibilities[0];
+        sceneManager.setTransformFromMarker(Marker5x5Transforms[0], plane);    
     }
     
     function startFly() {

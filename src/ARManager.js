@@ -16,12 +16,14 @@
 
     var ARManager = AR.ARManager = function ( framework, options ) {
 
-        var defaults = {}, opts;
+         var defaults = {
+            markerDetector : 'JSARToolkit'
+        }, opts;
 
         // Setting options
         opts = extend( {}, defaults, options );
 
-        var flowAnalysers, observers, background, bgCtx, callBackFunctions = [], maxMarkersToTrack = {};
+        var flowAnalysers, observers, background, bgCtx, callBackFunctions = [], maxMarkersToTrack = {}, cameraProjection = null;
 
          flowAnalysers = {
             'MarkerDetector': false,
@@ -32,7 +34,7 @@
             'MarkerAnalyser': MarkerObserver(),
         };
         
-        var markerDetector, numMarkers3x3 = 63;
+        var markerDetector;
 
         function VideoStreamObserver() {
             return new XML3DDataObserver( function ( records, observer ) {
@@ -57,31 +59,26 @@
         function MarkerObserver() {
             return new XML3DDataObserver( function ( records, observer ) {
                 var i,
-                    Marker3x3Transforms = records[0].result.getValue("Marker3x3Transforms"),
-                    Marker5x5Transforms = records[0].result.getValue("Marker5x5Transforms"),
-                    imageMarkerTransforms = records[0].result.getValue("imageMarkerTransforms"),
-                    Marker3x3Visibilities = records[0].result.getValue("Marker3x3Visibilities"),
-                    Marker5x5Visibilities = records[0].result.getValue("Marker5x5Visibilities"),
-                    imageMarkerVisibilities = records[0].result.getValue("imageMarkerVisibilities");
+                    marker5x5Transforms = records[0].result.getValue("marker5x5Transforms"),
+                    imageMarkerTransforms = records[0].result.getValue("customMarkerTransforms"),
+                    marker5x5Visibilities = records[0].result.getValue("marker5x5Visibilities"),
+                    imageMarkerVisibilities = records[0].result.getValue("customMarkerVisibilities");
                 
+				    cameraProjection = records[0].result.getValue("perspective");
                     if(callBackFunctions.length == 0)
                         return;
                         
-                    var mat4x4Marker3x3TransArray = null;
                     var mat4x4Marker5x5TransArray = null;
                     var mat4x4ImgMarkerTransArray = null;
-                    
-                    if(Marker3x3Transforms)
-                        mat4x4Marker3x3TransArray = sliceArray(Marker3x3Transforms, Marker3x3Visibilities);
-                        
-                    if(Marker5x5Transforms)    
-                        mat4x4Marker5x5TransArray = sliceArray(Marker5x5Transforms, Marker5x5Visibilities);
+                                           
+                    if(marker5x5Transforms)    
+                        mat4x4Marker5x5TransArray = sliceArray(marker5x5Transforms, marker5x5Visibilities);
                         
                     if(imageMarkerTransforms)  
                         mat4x4ImgMarkerTransArray = sliceArray(imageMarkerTransforms, imageMarkerVisibilities);
                                              
                     for(i in callBackFunctions) {
-                        callBackFunctions[i](mat4x4Marker3x3TransArray, mat4x4Marker5x5TransArray, mat4x4ImgMarkerTransArray, Marker3x3Visibilities, Marker5x5Visibilities, imageMarkerVisibilities);
+                        callBackFunctions[i](mat4x4Marker5x5TransArray, mat4x4ImgMarkerTransArray, marker5x5Visibilities, imageMarkerVisibilities);
                     }
             } );
         }
@@ -118,8 +115,8 @@
                  if( id === 'MarkerDetector' ) {
                      observers['MarkerDetector'].observe( flowAnalysers[id], {names: ["arvideo"]} );
                      log("ARManager: Observing Marker tags from the camera feed." );
-                     observers['MarkerAnalyser'].observe( flowAnalysers[id], {names: ["Marker5x5Transforms", "Marker3x3Transforms", "imageMarkerTransforms", "Marker5x5Visibilities",
-                                                                                      "Marker3x3Visibilities", "imageMarkerVisibilities"]} );
+                     observers['MarkerAnalyser'].observe( flowAnalysers[id], {names: ["marker5x5Transforms", "customMarkerTransforms", "marker5x5Visibilities",
+                                                                                      "customMarkerVisibilities", "perspective"]} );
                  }
             }
         }
@@ -135,16 +132,17 @@
 
             initFlowAnalysers();
 
-            markerDetector = new AR.Alvar(framework);
-                
+             if(opts.markerDetector === "JSARToolkit")
+                markerDetector = new AR.JSARToolkit(framework);
+			else
+                log("ARManager: Marker detector not defined");
+			
             initObservers();
-            maxMarkersToTrack.marker3x3 = document.getElementById('Marker3x3').value.length;
-            maxMarkersToTrack.marker5x5 = document.getElementById('Marker5x5').value.length;
-            maxMarkersToTrack.imageMarker = document.getElementById('imageMarkers').value.length;
+            maxMarkersToTrack.marker5x5 = document.getElementById('marker5x5').value.length;
+            maxMarkersToTrack.imageMarker = document.getElementById('customMarkers').value.length;
             
-            log("ARManager: Max number of marker3x3s to track " + maxMarkersToTrack.marker3x3);
             log("ARManager: Max number of marker5x5s to track " + maxMarkersToTrack.marker5x5);
-            log("ARManager: Max number of image markers to track " + maxMarkersToTrack.imageMarker);
+            log("ARManager: Max number of custom markers to track " + maxMarkersToTrack.imageMarker);
             log("ARManager: Initialization done");
 
         };
@@ -153,36 +151,9 @@
             callBackFunctions.push(callback);
         };
         
-        this.addMarker = function (markerId, markerType) {
-            var i, markers;
-            
-            if(markerType == "Marker3x3") {
-                if(markerId < 0 && markerId > numMarkers)
-                    log("ARManager: Incorrect marker3x3 id " +markerId+ ". Marker3x3 must be between 0 - 63");
-                
-                 markers = document.getElementById('Marker3x3').value;       
-            }
-            else if(markerType == "Marker5x5") {
-                markers = document.getElementById('Marker5x5').value;
-            } 
-            else if(markerType == "imageMarker") {
-                markers = document.getElementById('imageMarkers').value;
-            }
-            else {
-                log("ARManager: Wrong marker type " + markerType);
-                return; 
-            }
-            
-            for(i = 0; i < markers.length; ++i)
-            {
-                if(markers[i] == -1) {
-                    markers[i] = markerId;
-                    return;
-                }
-            }
-               
-            log("ARManager: Could not add " + markerType + " id " + markerId + " to objects to track"); 
-        };
+		this.getProjectionMatrix = function() {
+			return cameraProjection;
+		};
 
         this.init();
 

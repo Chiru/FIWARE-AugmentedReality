@@ -10,28 +10,26 @@
     window.onload = function () {
         testObject = document.getElementById('testObject');
         testObject2 = document.getElementById('testObject2');
-        testObject3 = document.getElementById('testObject3');
+		testObject3 = document.getElementById('testObject3');
         AR.start();
         ARManager = AR.setupARManager();
         sceneManager = AR.setupSceneManager();
         ARManager.setMarkerCallback(markerCallback);  
     };
     
-    function markerCallback(Marker3x3Transforms, Marker5x5Transforms, imageMarkerTransforms, Marker3x3Visibilities, Marker5x5Visibilities, imageMarkerVisibilities) {
+    function markerCallback(Marker5x5Transforms, imageMarkerTransforms, Marker5x5Visibilities, imageMarkerVisibilities) {
         
         if(imageMarkerTransforms && imageMarkerVisibilities) { 
             testObject.visible = imageMarkerVisibilities[0];
             sceneManager.setTransformFromMarker(imageMarkerTransforms[0], testObject, true);
-        }
-        
-        if(Marker3x3Transforms && Marker3x3Visibilities) {
-            testObject2.visible = Marker3x3Visibilities[0];
-            sceneManager.setTransformFromMarker(Marker3x3Transforms[0], testObject2, true);
+			
+			testObject3.visible = imageMarkerVisibilities[1];
+            sceneManager.setTransformFromMarker(imageMarkerTransforms[1], testObject3, true);
         }
        
         if(Marker5x5Transforms && Marker5x5Visibilities) {
-            testObject3.visible = Marker5x5Visibilities[0];
-            sceneManager.setTransformFromMarker(Marker5x5Transforms[0], testObject3, true);
+            testObject2.visible = Marker5x5Visibilities[0];
+            sceneManager.setTransformFromMarker(Marker5x5Transforms[0], testObject2, true);
         }
     }
 }( window['wex'] = window['wex'] || {} ));
