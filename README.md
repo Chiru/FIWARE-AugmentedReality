@@ -20,4 +20,3 @@ Version information
 2015-10-26  Release 4.4
             Previous Alvar tracking library is replaced by the JSARToolKit due
             to licensing issues.
-            Developer: Antti Karhu
